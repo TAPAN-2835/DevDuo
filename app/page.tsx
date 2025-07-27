@@ -307,10 +307,10 @@ export default function Portfolio() {
   ]
 
   const stats = [
-    { icon: <Users className="w-6 h-6" />, value: "50+", label: "Happy Clients" },
-    { icon: <Rocket className="w-6 h-6" />, value: "100+", label: "Projects Delivered" },
-    { icon: <Coffee className="w-6 h-6" />, value: "1000+", label: "Cups of Coffee" },
-    { icon: <Star className="w-6 h-6" />, value: "5.0", label: "Average Rating" },
+    { icon: <Users className="w-6 h-6" />, value: "Fresh", label: "Perspective" },
+    { icon: <Rocket className="w-6 h-6" />, value: "100%", label: "Dedication" },
+    { icon: <Coffee className="w-6 h-6" />, value: "24/7", label: "Learning" },
+    { icon: <Star className="w-6 h-6" />, value: "Modern", label: "Approach" },
   ]
 
   return (

@@ -59,9 +59,9 @@ export default function Footer() {
       
       <div className="container mx-auto px-6 py-16 relative z-10">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 max-w-4xl mx-auto">
           {/* Brand Section */}
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2 lg:col-span-2 text-center md:text-left">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -71,12 +71,12 @@ export default function Footer() {
               <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
                 DevDuo
               </div>
-              <p className="text-gray-400 mb-6 max-w-md">
+              <p className="text-gray-400 mb-6 max-w-md mx-auto md:mx-0">
                 Two developers, one vision: crafting exceptional digital experiences that push the boundaries of what's possible.
               </p>
               
               {/* Social Links */}
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 justify-center md:justify-start">
                 {socialLinks.map((social) => (
                   <motion.a
                     key={social.name}
@@ -102,6 +102,7 @@ export default function Footer() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="text-center md:text-left"
             >
               <h3 className="text-white font-semibold mb-4">{section.title}</h3>
               <ul className="space-y-3">
@@ -129,7 +130,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <motion.div
-          className="border-t border-gray-800 pt-8 text-center"
+          className="border-t border-gray-800 pt-10 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
