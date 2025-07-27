@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import "./globals.css"
 import CustomCursor from "@/components/CustomCursor"
 import { ThemeProvider } from "@/components/theme-provider"
+import SmoothScrollProvider from "@/components/SmoothScrollProvider"
 import { cn } from "@/lib/utils"
 import { Inter as FontSans } from "next/font/google"
 
@@ -40,8 +41,10 @@ html {
         style={{ cursor: "none" }}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <CustomCursor />
-          {children}
+          <SmoothScrollProvider>
+            <CustomCursor />
+            {children}
+          </SmoothScrollProvider>
         </ThemeProvider>
       </body>
     </html>

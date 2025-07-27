@@ -27,6 +27,7 @@ import CustomCursor from "@/components/CustomCursor"
 import Loader from "@/components/Loader"
 import ProjectCard from "@/components/ProjectCard"
 import AboutSection from "@/components/AboutSection"
+import Footer from "@/components/Footer"
 import { useScrollReveal, useStaggerAnimation } from "@/hooks/useScrollReveal"
 
 // Custom cursor component
@@ -211,6 +212,32 @@ export default function Portfolio() {
   useScrollReveal()
   useStaggerAnimation(".project-card", 0.2)
 
+  // Scroll spy functionality
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleScroll = () => {
+        const sections = ["home", "services", "projects", "about", "contact"]
+        const scrollPosition = window.scrollY + 100
+
+        for (const section of sections) {
+          const element = document.getElementById(section)
+          if (element) {
+            const offsetTop = element.offsetTop
+            const offsetHeight = element.offsetHeight
+
+            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+              setActiveSection(section)
+              break
+            }
+          }
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll)
+      return () => window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   const services = [
     {
       icon: <Code2 className="w-8 h-8" />,
@@ -299,6 +326,13 @@ export default function Portfolio() {
                 className="text-gray-300 hover:text-cyan-400 transition-colors relative"
                 whileHover={{ y: -2 }}
                 data-interactive
+                onClick={(e) => {
+                  e.preventDefault()
+                  const element = document.getElementById(item.toLowerCase())
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
               >
                 {item}
                 {activeSection === item.toLowerCase() && (
@@ -338,7 +372,14 @@ export default function Portfolio() {
                     key={item}
                     href={`#${item.toLowerCase()}`}
                     className="block text-gray-300 hover:text-cyan-400 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setIsMenuOpen(false)
+                      const element = document.getElementById(item.toLowerCase())
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' })
+                      }
+                    }}
                     data-interactive
                   >
                     {item}
@@ -399,6 +440,12 @@ export default function Portfolio() {
                 size="lg"
                 className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-black font-semibold px-8 py-3 rounded-full transition-all duration-300 transform hover:scale-105 group"
                 data-interactive
+                onClick={() => {
+                  const element = document.getElementById('contact')
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
               >
                 Start Your Project
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -408,6 +455,12 @@ export default function Portfolio() {
                 size="lg"
                 className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 px-8 py-3 rounded-full transition-all duration-300 bg-transparent"
                 data-interactive
+                onClick={() => {
+                  const element = document.getElementById('projects')
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
               >
                 View Our Work
               </Button>
@@ -733,46 +786,7 @@ export default function Portfolio() {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 border-t border-gray-800 relative">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4 md:mb-0">
-              DevDuo
-            </div>
-
-            <div className="flex space-x-6">
-              <motion.a
-                href="#"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
-                whileHover={{ scale: 1.1, y: -2 }}
-                data-interactive
-              >
-                <Github className="w-6 h-6" />
-              </motion.a>
-              <motion.a
-                href="#"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
-                whileHover={{ scale: 1.1, y: -2 }}
-                data-interactive
-              >
-                <Linkedin className="w-6 h-6" />
-              </motion.a>
-              <motion.a
-                href="#"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
-                whileHover={{ scale: 1.1, y: -2 }}
-                data-interactive
-              >
-                <Mail className="w-6 h-6" />
-              </motion.a>
-            </div>
-          </div>
-
-          <div className="text-center text-gray-400 text-sm mt-8">
-            © 2024 DevDuo. Crafting digital experiences with passion.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }

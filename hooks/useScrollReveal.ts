@@ -6,6 +6,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger)
+  
+  // Connect Lenis to ScrollTrigger if available
+  if (typeof window !== 'undefined' && window.lenis) {
+    window.lenis.on('scroll', ScrollTrigger.update)
+    
+    gsap.ticker.add((time) => {
+      window.lenis?.raf(time * 1000)
+    })
+  }
 }
 
 export function useScrollReveal() {
