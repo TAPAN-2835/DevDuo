@@ -35,27 +35,29 @@ function CustomCursorComponent() {
   const [isHovering, setIsHovering] = useState(false)
 
   useEffect(() => {
-    const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-    }
+    if (typeof window !== 'undefined') {
+      const updateMousePosition = (e: MouseEvent) => {
+        setMousePosition({ x: e.clientX, y: e.clientY })
+      }
 
-    const handleMouseEnter = () => setIsHovering(true)
-    const handleMouseLeave = () => setIsHovering(false)
+      const handleMouseEnter = () => setIsHovering(true)
+      const handleMouseLeave = () => setIsHovering(false)
 
-    window.addEventListener("mousemove", updateMousePosition)
+      window.addEventListener("mousemove", updateMousePosition)
 
-    const interactiveElements = document.querySelectorAll("button, a, [data-interactive]")
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleMouseEnter)
-      el.addEventListener("mouseleave", handleMouseLeave)
-    })
-
-    return () => {
-      window.removeEventListener("mousemove", updateMousePosition)
+      const interactiveElements = document.querySelectorAll("button, a, [data-interactive]")
       interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", handleMouseEnter)
-        el.removeEventListener("mouseleave", handleMouseLeave)
+        el.addEventListener("mouseenter", handleMouseEnter)
+        el.addEventListener("mouseleave", handleMouseLeave)
       })
+
+      return () => {
+        window.removeEventListener("mousemove", updateMousePosition)
+        interactiveElements.forEach((el) => {
+          el.removeEventListener("mouseenter", handleMouseEnter)
+          el.removeEventListener("mouseleave", handleMouseLeave)
+        })
+      }
     }
   }, [])
 
@@ -109,6 +111,21 @@ function TypingText({ text, delay = 0 }: { text: string; delay?: number }) {
 
 // Floating Elements Background
 function FloatingElements() {
+  const [dimensions, setDimensions] = useState({ width: 1200, height: 800 })
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setDimensions({ width: window.innerWidth, height: window.innerHeight })
+      
+      const handleResize = () => {
+        setDimensions({ width: window.innerWidth, height: window.innerHeight })
+      }
+      
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {[...Array(20)].map((_, i) => (
@@ -116,12 +133,12 @@ function FloatingElements() {
           key={i}
           className="absolute w-2 h-2 bg-cyan-400/20 rounded-full"
           initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * dimensions.width,
+            y: Math.random() * dimensions.height,
           }}
           animate={{
-            y: [null, Math.random() * window.innerHeight],
-            x: [null, Math.random() * window.innerWidth],
+            y: [null, Math.random() * dimensions.height],
+            x: [null, Math.random() * dimensions.width],
           }}
           transition={{
             duration: Math.random() * 10 + 10,
