@@ -1,8 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Github, Linkedin, Mail, Twitter, Heart } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Github, Linkedin, Mail, Twitter } from "lucide-react"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -48,18 +47,7 @@ export default function Footer() {
       title: "Company",
       links: [
         { name: "About Us", href: "#about" },
-        { name: "Our Team", href: "#about" },
-        { name: "Careers", href: "#" },
-        { name: "Contact", href: "#contact" }
-      ]
-    },
-    {
-      title: "Resources",
-      links: [
-        { name: "Blog", href: "#" },
-        { name: "Case Studies", href: "#projects" },
-        { name: "Documentation", href: "#" },
-        { name: "Support", href: "#" }
+        { name: "Our Team", href: "#about" }
       ]
     }
   ]
@@ -122,6 +110,13 @@ export default function Footer() {
                     <a
                       href={link.href}
                       className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 text-sm"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        const element = document.getElementById(link.href.replace('#', ''))
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' })
+                        }
+                      }}
                     >
                       {link.name}
                     </a>
@@ -132,52 +127,16 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Newsletter Section */}
-        <motion.div
-          className="border-t border-gray-800 pt-8 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="text-center">
-            <h3 className="text-xl font-semibold text-white mb-2">Stay Updated</h3>
-            <p className="text-gray-400 mb-6">Get the latest insights and project updates delivered to your inbox.</p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:border-cyan-400 focus:ring-cyan-400/20 transition-all duration-300 text-white placeholder-gray-400"
-              />
-              <Button className="bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-500 hover:to-blue-600 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300">
-                Subscribe
-              </Button>
-            </div>
-          </div>
-        </motion.div>
-
         {/* Bottom Bar */}
         <motion.div
-          className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center"
+          className="border-t border-gray-800 pt-8 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="text-gray-400 text-sm mb-4 md:mb-0">
+          <div className="text-gray-400 text-sm">
             © {currentYear} DevDuo. All rights reserved.
-          </div>
-          
-          <div className="flex items-center space-x-6 text-sm">
-            <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors duration-300">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors duration-300">
-              Terms of Service
-            </a>
-            <div className="flex items-center text-gray-400">
-              Made with <Heart className="w-4 h-4 mx-1 text-red-400" /> by DevDuo
-            </div>
           </div>
         </motion.div>
       </div>

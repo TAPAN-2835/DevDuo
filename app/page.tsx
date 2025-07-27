@@ -83,20 +83,37 @@ function CustomCursorComponent() {
 function TypingText({ text, delay = 0 }: { text: string; delay?: number }) {
   const [displayText, setDisplayText] = useState("")
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentSentenceIndex, setCurrentSentenceIndex] = useState(0)
+  
+  const sentences = [
+    "Crafting digital dreams with code and creativity.",
+    "Building the future, one pixel at a time.",
+    "Where innovation meets implementation.",
+    "Turning ideas into digital reality.",
+    "Code. Design. Deploy. Repeat."
+  ]
 
   useEffect(() => {
-    const timer = setTimeout(
-      () => {
-        if (currentIndex < text.length) {
-          setDisplayText((prev) => prev + text[currentIndex])
-          setCurrentIndex((prev) => prev + 1)
-        }
-      },
-      delay + currentIndex * 50,
-    )
-
-    return () => clearTimeout(timer)
-  }, [currentIndex, text, delay])
+    const currentSentence = sentences[currentSentenceIndex]
+    
+    if (currentIndex < currentSentence.length) {
+      const timer = setTimeout(() => {
+        setDisplayText(currentSentence.substring(0, currentIndex + 1))
+        setCurrentIndex(currentIndex + 1)
+      }, 30) // Faster typing speed
+      
+      return () => clearTimeout(timer)
+    } else {
+      // Wait before starting next sentence
+      const timer = setTimeout(() => {
+        setCurrentSentenceIndex((prev) => (prev + 1) % sentences.length)
+        setCurrentIndex(0)
+        setDisplayText("")
+      }, 2000) // Wait 2 seconds before next sentence
+      
+      return () => clearTimeout(timer)
+    }
+  }, [currentIndex, currentSentenceIndex, sentences])
 
   return (
     <span>
@@ -309,7 +326,7 @@ export default function Portfolio() {
         animate={{ y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center relative">
           <motion.div
             className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
             whileHover={{ scale: 1.05 }}
@@ -361,29 +378,34 @@ export default function Portfolio() {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              className="md:hidden bg-black/95 backdrop-blur-md border-t border-gray-800"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-black/95 backdrop-blur-md border-t border-gray-800 absolute top-full left-0 right-0 z-50"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
             >
-              <div className="container mx-auto px-6 py-4 space-y-4">
+              <div className="container mx-auto px-6 py-6 space-y-4">
                 {["Home", "Services", "Projects", "About", "Contact"].map((item) => (
-                  <a
+                  <motion.a
                     key={item}
                     href={`#${item.toLowerCase()}`}
-                    className="block text-gray-300 hover:text-cyan-400 transition-colors"
+                    className="block text-gray-300 hover:text-cyan-400 transition-colors text-lg font-medium py-2"
                     onClick={(e) => {
                       e.preventDefault()
                       setIsMenuOpen(false)
-                      const element = document.getElementById(item.toLowerCase())
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' })
-                      }
+                      setTimeout(() => {
+                        const element = document.getElementById(item.toLowerCase())
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth' })
+                        }
+                      }, 100)
                     }}
                     data-interactive
+                    whileHover={{ x: 10 }}
+                    transition={{ duration: 0.2 }}
                   >
                     {item}
-                  </a>
+                  </motion.a>
                 ))}
               </div>
             </motion.div>
@@ -424,8 +446,8 @@ export default function Portfolio() {
 
               <p className="text-xl text-gray-400 max-w-lg">
                 <TypingText
-                  text="Two developers, one vision: crafting exceptional web experiences that push the boundaries of what's possible."
-                  delay={500}
+                  text="Crafting digital dreams with code and creativity."
+                  delay={300}
                 />
               </p>
             </div>
@@ -616,11 +638,14 @@ export default function Portfolio() {
             {services.map((service, index) => (
               <motion.div
                 key={service.title}
-                data-animate="scale"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.8 }}
+                initial={{ opacity: 0, y: 60, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ 
+                  delay: index * 0.15, 
+                  duration: 0.8,
+                  ease: "easeOut"
+                }}
                 whileHover={{ y: -10, scale: 1.02 }}
                 className="group"
               >
@@ -677,7 +702,19 @@ export default function Portfolio() {
 
           <div className="grid lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
-              <div key={project.title} className="project-card">
+              <motion.div
+                key={project.title}
+                initial={{ opacity: 0, y: 60, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ 
+                  delay: index * 0.2, 
+                  duration: 0.8,
+                  ease: "easeOut"
+                }}
+                whileHover={{ y: -10, scale: 1.02 }}
+                className="project-card"
+              >
                 <ProjectCard
                   title={project.title}
                   description={project.description}
@@ -687,7 +724,7 @@ export default function Portfolio() {
                   githubUrl="#"
                   index={index}
                 />
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
