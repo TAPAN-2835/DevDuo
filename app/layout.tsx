@@ -6,7 +6,7 @@ import "./globals.css"
 import CustomCursor from "@/components/CustomCursor"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import { Mona_Sans as FontSans } from "next/font/google"
+import { Inter as FontSans } from "next/font/google"
 
 const inter = FontSans({
   subsets: ["latin"],
